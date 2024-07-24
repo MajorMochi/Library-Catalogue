@@ -1,0 +1,23 @@
+#include <iostream>
+
+using namespace std;
+
+struct book
+{
+    string Name, Author, Publisher, Language[5]={"English", "Turkish", "Somali", "German", "Arabic"};
+    int pages, publish_date[3];
+    double rating;
+};
+
+class User
+{
+protected:
+
+public:
+};
+
+
+int main()
+{
+
+}
