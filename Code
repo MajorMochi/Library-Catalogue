@@ -1,23 +1,199 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 struct book
 {
-    string Name, Author, Publisher, Language[5]={"English", "Turkish", "Somali", "German", "Arabic"};
+    string Title, Author;
     int pages, publish_date[3];
-    double rating;
+    bool Availability;
 };
 
-class User
+class Library
 {
 protected:
+    vector<book> books;
+    book mybook;
 
 public:
+    //function to add books to library database.
+    void addBook()
+    {
+        cout<<"                                                         Book Details:"<<endl;
+        cout<<"Title: ";
+        cin.ignore();
+        getline(cin, mybook.Title);
+
+        cout<<"Author Name: ";
+        cin>>mybook.Author;
+        mybook.Availability = true;
+
+        //pushing the book's title to our library
+        books.push_back(mybook);
+
+        //printing the info for the user to see what they have entered.
+        printBook(mybook);
+    }
+
+    void printBook(const book &myb)
+    {
+        //here is the code for printing a book's information.
+        cout<<endl<<"Title: "<<myb.Title<<endl;
+        cout<<"Author: "<<myb.Author<<endl;
+        cout<<"Availability: ";
+
+        //an if statement to the statues of a book's availability.
+        if(mybook.Availability == true)
+        {
+            cout<<"Available"<<endl;
+        }
+        else
+        {
+            cout<<"Unavailable"<<endl;
+        }
+    }
+
+    void bookSearch()
+    {
+        string BookName;
+        char c;
+        bool input;
+        cout<<"Enter Book Title:"<<endl;
+        cin.ignore();
+        getline(cin, BookName);
+
+        bool found = false;
+
+        //this line iterates in the books vector.
+        for(const auto& mybook : books)
+        {
+            //this block is for if the book has been found.
+            if(BookName == mybook.Title)
+            {
+                printBook(mybook);
+                found = true;
+                break;
+            }
+        }
+
+            //while this block is for if the book has not been found.
+            if (!found)
+            {
+                cout<<"The Book was not found in our Library"<<endl<<"Would you like to make an Order Request for "<<BookName<<"?(Y/N): ";
+                cin>>c;
+                input = false;
+                do
+                {
+                if(c=='Y'||c=='y')
+                {
+                    cout<<"                          Book Request Form"<<endl;
+                    addBook();
+                    cout<<BookName<<" has been requested."<<endl;
+                    input = true;
+                }
+                else if(c=='N'||c=='n')
+                {
+                    input = true;
+                }
+
+                // Ask for input again
+                else
+                {
+                    cout << "Invalid option, please try again (Y/N): ";
+                    cin >> c;  // Ask for input again
+                }
+                }
+                while(!input);
+            }
+    }
+};
+
+class Users
+{
+protected:
+    string username;
+    int pin;
+public:
+    void CreateUser()
+    {
+        cout<<"Enter Username: ";
+        cin>>username;
+        cout<<"Enter 4-digit pin: ";
+        cin>>pin;
+        while(pin <1000 || pin >9999)
+        {
+            cout<<"*Your pin must be 4 digits*"<<endl;
+            cin>>pin;
+        }
+    }
+
+    void Login()
+    {
+        cout<<"Enter Username: ";
+        cin>>username;
+        cout<<"Enter 4-digit pin: ";
+        cin>>pin;
+        while(pin <1000 || pin >9999)
+        {
+            cout<<"*Incorrect pin*"<<endl<<"Enter 4-digit pin: ";
+            cin>>pin;
+        }
+    }
 };
 
 
 int main()
 {
+    Users user;
+    Library lib;
+    char c;
+    int choice;
+    cout<<"                                                             LIBRARY"<<endl;
+    do
+    {
+    cout<<"Login/Create Account: ";
+    cin>>c;
+    if(c=='C'||c=='c')
+    {
+        user.CreateUser();
+        break;
+    }
+    else if(c=='L'||c=='l')
+    {
+        user.Login();
+        break;
+    }
+    else
+    {
+        cout<<"*Enter a valid input*"<<endl<<endl;
+    }
+    }
+    while(true);
+
+    cout<<"                                                             LIBRARY"<<endl;
+    do
+    {
+    cout<<"1)Search"<<"   2)Request Book"<<"   3)Quit: ";
+    cin>>choice;
+
+    if(choice==1)
+    {
+        lib.bookSearch();
+    }
+    else if(choice==2)
+    {
+        lib.addBook();
+    }
+    else if(choice == 3)
+    {
+        break;
+    }
+    else
+    {
+        cout << "Invalid option, please try again." << endl;
+    }
+    }
+    while(true);
 
 }
