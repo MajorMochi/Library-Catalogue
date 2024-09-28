@@ -56,12 +56,12 @@ public:
 
     void bookSearch()
     {
-        string BookName;
+        string BookInfo;
         char c;
         bool input;
-        cout<<"Enter Book Title:"<<endl;
+        cout<<"Enter Book Title/Author:"<<endl;
         cin.ignore();
-        getline(cin, BookName);
+        getline(cin, BookInfo);
 
         bool found = false;
 
@@ -69,18 +69,31 @@ public:
         for(const auto& mybook : books)
         {
             //this block is for if the book has been found.
-            if(BookName == mybook.Title)
+            if(BookInfo == mybook.Title)
             {
                 printBook(mybook);
                 found = true;
                 break;
+            }
+
+            //if the book's title wasn't found then we check for the book's author. The problem here is the search is cap sensitive so Brandon Sanderson would be a different author to brandon sanderson
+            if (!found)
+            {
+                for (const auto& mybook : books)
+                {
+                    if (BookInfo == mybook.Author)
+                    {
+                        printBook(mybook);
+                        found = true;
+                    }
+                }
             }
         }
 
             //while this block is for if the book has not been found.
             if (!found)
             {
-                cout<<"The Book was not found in our Library"<<endl<<"Would you like to make an Order Request for "<<BookName<<"?(Y/N): ";
+                cout<<"The Book was not found in our Library"<<endl<<"Would you like to make an Order Request for this Book?(Y/N): ";
                 cin>>c;
                 input = false;
                 do
@@ -89,7 +102,7 @@ public:
                 {
                     cout<<"                          Book Request Form"<<endl;
                     addBook();
-                    cout<<BookName<<" has been requested."<<endl;
+                    cout<<"Your Book has been requested."<<endl;
                     input = true;
                 }
                 else if(c=='N'||c=='n')
